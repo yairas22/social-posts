@@ -1,0 +1,79 @@
+version: '3'
+
+volumes:
+  mysql-test-data:
+    driver: local
+  rabbitmq-test-data:
+    driver: local
+
+services:
+  mysql:
+    image: mysql:8.0.3
+    ports:
+      - 3306:3306
+    volumes:
+      - "mysql-test-data:/var/lib/mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=feeds
+
+  social-api:
+    build:
+      context: ./social-api
+    command: ./wait-for-it.sh rabbitmq:5672 -s -t 60 -- npm run start-dev
+    ports:
+      - 3008:3008
+      - 5860:5860
+    environment:
+      - MYSQL_SERVER=mysql
+      - MYSQL_DATABASE=feeds
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1234
+    volumes:
+      - "./social-api/src:/social-api/src"
+      - "./social-api/server.js:/social-api/server.js"
+    depends_on:
+      - mysql
+      - rabbitmq
+  
+  social-posts-diagnostic:
+    build:
+      context: ./social-posts-diagnostic
+    command: ./wait-for-it.sh rabbitmq:5672 -s -t 60 -- npm run start-dev
+    volumes:
+      - "./social-posts-diagnostic/src:/diagnostic/src"
+      - "./social-posts-diagnostic/index.js:/diagnostic/index.js"
+    environment:
+      - WATCHLIST_WORDS=damn|disgusting|suicide|ben&jerry
+      - MYSQL_SERVER=mysql
+      - MYSQL_DATABASE=feeds
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1234
+    depends_on:
+      - rabbitmq
+      - mysql
+
+  rabbitmq:
+    image: rabbitmq:3.8.4
+    ports:
+      - "5672:5672"
+    volumes:
+      - "rabbitmq-test-data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit"
+
+  integration-test:
+    build:
+      context: ./test
+    volumes:
+      - "./test/src:/integration-test/src"
+      - "./test/scenarios:/integration-test/scenarios"
+    environment:
+      - MYSQL_SERVER=mysql
+      - MYSQL_DATABASE=feeds
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1234
+    depends_on:
+      - mysql
+      - social-api
