@@ -1,0 +1,42 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Social API - Feeds management",
+    "version": "1.0.0",
+    "title": "Feeds API"
+  },
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/feeds": {
+      "get": {
+        "tags": ["feeds"],
+        "summary": "Get the recommended posts",
+        "description": "",
+        "x-swagger-router-controller": "feeds",
+        "operationId": "getRelevance",
+        "parameters": [
+          {
+            "description": "API Authorization credentials using Basic",
+            "in": "header",
+            "name": "Authorization",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number",
+            "default": 20,
+            "description": "Limitation of number of items"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request received successfully"
+          }
+        }
+      }
+    }
+  }
+}

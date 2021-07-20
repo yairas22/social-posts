@@ -1,0 +1,63 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Social API - Posts management",
+    "version": "1.0.0",
+    "title": "Posts API"
+  },
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/posts/upload": {
+      "post": {
+        "tags": ["posts"],
+        "summary": "Add a new post to your community!",
+        "description": "",
+        "x-swagger-router-controller": "posts",
+        "operationId": "upload",
+        "parameters": [
+          {
+            "description": "API Authorization credentials using Basic",
+            "in": "header",
+            "name": "Authorization",
+            "type": "string"
+          },
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/postsUploadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request received successfully"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "postsUploadRequest": {
+      "required": ["title", "body", "communityId"],
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "communityId": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
