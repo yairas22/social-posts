@@ -9,6 +9,9 @@ This project has the following features:
 - Integration test using mocha for testing and migrating tables and data into MySQL
 - All apps (including integration test) has **nodemon** - implemented for easily change and restart with new changes
 
+## Database Architecture
+![alt text](database_architecture.jpeg)
+
 ## Start service
 
 ```
