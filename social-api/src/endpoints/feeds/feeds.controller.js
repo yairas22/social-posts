@@ -7,6 +7,7 @@ const init = ({ feedsService }) => {
         return res.send({ success: true, feeds })
       } catch (error) {
         console.log(`Feeds Relevance Error: ${error}`)
+        next()
       }
     }
   }

@@ -13,6 +13,7 @@ const init = ({ postsService }) => {
         return res.send({ success: true, message: `Successfully created new post!`})
       } catch (error) {
         console.log(`Posts Upload Error: ${error}`)
+        next()
       }
     }
   }
