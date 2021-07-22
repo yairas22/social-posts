@@ -53,7 +53,7 @@ Add the following code in `.vscode/launch.json`
       "request": "attach",
       "port": 5860,
       "address": "localhost",
-      "localRoot": "${workspaceFolder}/social-posts/social-api",
+      "localRoot": "${workspaceFolder}/social-api",
       "remoteRoot": "/social-api",
       "protocol": "inspector",
       "sourceMaps": true,
