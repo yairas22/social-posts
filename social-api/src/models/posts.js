@@ -18,7 +18,7 @@ function postsModel (mysqlClient) {
     if (totalCount < limit) {
       const differentCountry = await mysqlClient.execute(
         queryCountry(false),
-        [ communities, country, userId, totalCount ]
+        [ communities, country, userId, limit - totalCount ]
       )
   
       return [...sameCountry, ...differentCountry]
