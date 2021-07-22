@@ -67,6 +67,7 @@ services:
   integration-test:
     build:
       context: ./test
+    command: ./wait-for-it.sh social-api:3008 -s -t 60 -- npm run test
     volumes:
       - "./test/src:/integration-test/src"
       - "./test/scenarios:/integration-test/scenarios"
