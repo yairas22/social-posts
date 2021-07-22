@@ -17,7 +17,7 @@ async function run() {
   const postsModel = require('./src/models/posts')(mysqlClient)
   const usersModel = require('./src/models/users')(mysqlClient)
   const queueService = await require('./src/services/queue')()
-  const postsService = require('./src/services/posts')({ postsModel, queueService })
+  const postsService = require('./src/services/posts')({ postsModel, usersModel, queueService })
   const feedsService = require('./src/services/feeds')({ postsModel, usersModel })
   const app = express()
 

@@ -30,6 +30,7 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_USER=root
       - MYSQL_PASSWORD=1234
+      - NODE_ENV=DEV
     volumes:
       - "./social-api/src:/social-api/src"
       - "./social-api/server.js:/social-api/server.js"
@@ -40,17 +41,18 @@ services:
   social-posts-diagnostic:
     build:
       context: ./social-posts-diagnostic
-    command: ./wait-for-it.sh rabbitmq:5672 -s -t 60 -- npm run start-dev
+    command: ./wait-for-it.sh rabbitmq:5672 -s -t 90 -- npm run start-dev
     volumes:
       - "./social-posts-diagnostic/src:/diagnostic/src"
       - "./social-posts-diagnostic/index.js:/diagnostic/index.js"
     environment:
-      - WATCHLIST_WORDS=damn|disgusting|suicide|ben&jerry
+      - WATCHLIST_WORDS=suffering|depressed|suicide|ben&jerry
       - MYSQL_SERVER=mysql
       - MYSQL_DATABASE=feeds
       - MYSQL_PORT=3306
       - MYSQL_USER=root
       - MYSQL_PASSWORD=1234
+      - NODE_ENV=DEV
     depends_on:
       - rabbitmq
       - mysql
@@ -77,3 +79,4 @@ services:
     depends_on:
       - mysql
       - social-api
+      - social-posts-diagnostic

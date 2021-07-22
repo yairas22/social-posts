@@ -11,15 +11,20 @@ function postsModel (mysqlClient) {
   async function getByRelatedCommunities (communities, country, userId, limit = 100) {
     const sameCountry = await mysqlClient.execute(
       queryCountry(true),
-      [ communities, country, userId, Math.ceil(limit/2) ]
+      [ communities, country, userId, limit ]
     )
+    const totalCount = sameCountry.length
 
-    const differentCountry = await mysqlClient.execute(
-      queryCountry(false),
-      [ communities, country, userId, Math.ceil(limit/2) ]
-    )
-
-    return [...sameCountry, ...differentCountry]
+    if (totalCount < limit) {
+      const differentCountry = await mysqlClient.execute(
+        queryCountry(false),
+        [ communities, country, userId, totalCount ]
+      )
+  
+      return [...sameCountry, ...differentCountry]
+    }
+    
+    return [...sameCountry]
   }
 
   return { insertNewPost, getByRelatedCommunities }
